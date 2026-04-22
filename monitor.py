@@ -4,11 +4,10 @@ import json
 import time
 import logging
 import smtplib
-import hashlib
 import requests
+import cloudscraper
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from datetime import datetime
 
 logging.basicConfig(
     level=logging.INFO,
@@ -41,6 +40,10 @@ EMAIL_TO = os.environ["EMAIL_TO"]
 
 POLL_INTERVAL = int(os.environ.get("POLL_INTERVAL", "60"))
 
+_scraper = cloudscraper.create_scraper(
+    browser={"browser": "chrome", "platform": "linux", "mobile": False}
+)
+
 
 def load_seen() -> set:
     try:
@@ -58,15 +61,11 @@ def save_seen(vins: set) -> None:
 
 def fetch_inventory() -> list:
     headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-        ),
         "Accept": "application/json",
         "Accept-Language": "de-DE,de;q=0.9",
         "Referer": "https://www.tesla.com/de_DE/inventory/new/my",
     }
-    resp = requests.get(TESLA_API_URL, headers=headers, timeout=30)
+    resp = _scraper.get(TESLA_API_URL, headers=headers, timeout=30)
     resp.raise_for_status()
     data = resp.json()
     return data.get("results", [])
