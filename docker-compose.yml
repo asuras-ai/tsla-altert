@@ -1,0 +1,11 @@
+services:
+  tesla-monitor:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - tesla-data:/data
+
+volumes:
+  tesla-data:
