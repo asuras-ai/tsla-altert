@@ -37,7 +37,7 @@ SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
 SMTP_USER = os.environ["SMTP_USER"]
 SMTP_PASS = os.environ["SMTP_PASS"]
-EMAIL_TO = os.environ.get("EMAIL_TO", "j.cornels@gmail.com")
+EMAIL_TO = os.environ["EMAIL_TO"]
 
 POLL_INTERVAL = int(os.environ.get("POLL_INTERVAL", "60"))
 
